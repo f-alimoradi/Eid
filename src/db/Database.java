@@ -4,7 +4,9 @@ import db.exception.EntityNotFoundException;
 import db.exception.InvalidEntityException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.text.SimpleDateFormat;
 
 public class Database {
     private static ArrayList<Entity> entities = new ArrayList<>();
@@ -13,9 +15,16 @@ public class Database {
 
     public static void add(Entity entity) throws InvalidEntityException{
         entityCount++;
-        Validator validator = validators.get(entity.getEntityCode());
-        validator.validate(entity);
+        if (validators.containsKey(entity.getEntityCode())) {
+            Validator validator = validators.get(entity.getEntityCode());
+            validator.validate(entity);
+        }
         entity.id = entityCount;
+        if (entity instanceof Trackable trackable) {
+            Date currentDate = new Date();
+            trackable.setCreationDate(currentDate);
+            trackable.setLastModificationDate(currentDate);
+        }
         entities.add(entity.copy());
 
     }
@@ -40,14 +49,29 @@ public class Database {
         }
     }
     public static void update(Entity entity) throws EntityNotFoundException, InvalidEntityException{
-        if (entities.contains(entity)) {
-            Validator validator = validators.get(entity.getEntityCode());
-            validator.validate(entity);
-            entities.add(entities.indexOf(entity), entity.copy());
+        boolean notExist = true;
+        int index = 0;
+        for (Entity e : entities) {
+            if (e.id == entity.id) {
+                if (validators.containsKey(entity.getEntityCode())) {
+                    Validator validator = validators.get(entity.getEntityCode());
+                    validator.validate(entity);
+                }
+                if (entity instanceof Trackable trackable) {
+                    Date currentDate = new Date();
+                    trackable.setLastModificationDate(currentDate);
+                }
+                notExist = false;
+                index = entities.indexOf(e);
+            }
         }
-        else {
+        if (notExist) {
             throw new EntityNotFoundException();
         }
+        else {
+            entities.add(index, entity.copy());
+        }
+
     }
     public static void registerValidator(int entityCode, Validator validator) {
         if (validators.containsKey(entityCode)) {
