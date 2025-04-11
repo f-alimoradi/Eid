@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.text.SimpleDateFormat;
 
 public class Database {
-    private static ArrayList<Entity> entities = new ArrayList<>();
+    private static final ArrayList<Entity> entities = new ArrayList<>();
     private static int entityCount = 0;
     private static HashMap<Integer, Validator> validators = new HashMap<>();
 
@@ -78,5 +78,11 @@ public class Database {
             throw new IllegalArgumentException("Entity code " + entityCode + " already exists");
         }
         validators.put(entityCode, validator);
+    }
+    public static Entity getEntityByIndex(int index) {
+            return entities.get(index).copy();
+    }
+    public static int getEntitySize() {
+        return entities.size();
     }
 }
