@@ -16,15 +16,15 @@ public static void main(String[] args) throws InvalidEntityException {
     Scanner scanner = new Scanner(System.in);
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     while (true) {
-        String command = scanner.next();
+        String command = scanner.nextLine().trim();
         switch (command) {
             case "add task":
                 System.out.println("title: ");
-                String taskTitle = scanner.next();
+                String taskTitle = scanner.nextLine();
                 System.out.println("description: ");
-                String description = scanner.next();
+                String description = scanner.nextLine();
                 System.out.println("Dou Date: ");
-                String input = scanner.next();
+                String input = scanner.nextLine();
                 try {
                     Date duoDate = simpleDateFormat.parse(input);
                     TaskService.addTask(taskTitle, description, duoDate);
@@ -37,39 +37,44 @@ public static void main(String[] args) throws InvalidEntityException {
                 System.out.println("TaskID: ");
                 int taskID = scanner.nextInt();
                 System.out.println("description: ");
-                String stepTitle = scanner.next();
+                String stepTitle = scanner.nextLine();
                 StepService.addStep(taskID, stepTitle);
                 break;
             case "delete":
                 int ID = scanner.nextInt();
-                if (!(get(ID) instanceof Task)) {
-                    TaskService.deleteTask(ID);
-                } else {
-                    try {
-                        delete(ID);
-                        System.out.println("Entity with ID=" + ID + "successfully deleted.");
-                    }catch (EntityNotFoundException e) {
-                        System.out.println("Cannot delete entity with ID=" + ID + ".");
-                        System.out.println("Error: Something happend");
+                try {
+                    if (!(get(ID) instanceof Task)) {
+                        TaskService.deleteTask(ID);
+                    } else {
+                        try {
+                            delete(ID);
+                            System.out.println("Entity with ID=" + ID + "successfully deleted.");
+                        }catch (EntityNotFoundException e) {
+                            System.out.println("Cannot delete entity with ID=" + ID + ".");
+                            System.out.println("Error: Something happend");
+                        }
                     }
+                } catch (EntityNotFoundException e) {
+                    System.out.println("Cannot delete entity with ID=" + ID + ".");
+                    System.out.println("Error: Something happend");
                 }
                 break;
             case "update task":
                 System.out.println("ID: ");
                 int id = scanner.nextInt();
                 System.out.println("Field: ");
-                String field = scanner.next();
+                String field = scanner.nextLine();
                 System.out.println("New Value: ");
-                String value = scanner.next();
+                String value = scanner.nextLine();
                 TaskService.updateTask(id, field, value);
                 break;
             case "update step":
                 System.out.println("ID: ");
                 int Id = scanner.nextInt();
                 System.out.println("Field: ");
-                String Field = scanner.next();
+                String Field = scanner.nextLine();
                 System.out.println("New Value: ");
-                String Value = scanner.next();
+                String Value = scanner.nextLine();
                 StepService.updateStep(Id, Field,Value);
                 break;
             case "get task-by-id":
