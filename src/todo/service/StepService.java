@@ -2,6 +2,7 @@ package todo.service;
 
 import db.Database;
 import db.Entity;
+import db.exception.EntityNotFoundException;
 import db.exception.InvalidEntityException;
 import todo.entity.Step;
 import todo.entity.Task;
@@ -52,7 +53,12 @@ public class StepService {
                 case "title":
                     step.title = value;
                     String old = ((Step) get(id)).title;
-                    update(step);
+                    try {
+                        update(step);
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
                     System.out.println("Successfully updated the step.");
                     System.out.println("Field: " + field);
                     System.out.println("Old value: " + old);
@@ -61,10 +67,20 @@ public class StepService {
                 case "statue":
                     if (value.equals("not started")){
                         step.status = Step.Status.NotStarted;
-                        update(step);
+                        try {
+                            update(step);
+                        } catch (EntityNotFoundException e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
                     } else if (value.equals("completed")) {
                         step.status = Step.Status.Completed;
-                        update(step);
+                        try {
+                            update(step);
+                        } catch (EntityNotFoundException e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
                     }
                     int stepCounter = 0;
                     Task task = new Task();
@@ -83,7 +99,12 @@ public class StepService {
                     }
                     if (stepCounter == steps.size() - 1) {
                         task.status = Task.Status.Completed;
-                        update(task);
+                        try {
+                            update(step);
+                        } catch (EntityNotFoundException e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
                     }
                     System.out.println("Successfully updated the step.");
                     System.out.println("Field: " + field);

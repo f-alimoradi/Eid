@@ -24,7 +24,11 @@ public class TaskService {
             if (Database.get(taskId) instanceof Task) {
                 task = (Task) Database.get(taskId);
                 task.status = Task.Status.Completed;
-                update(task);
+                try {
+                    update(task);
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         } catch (EntityNotFoundException e) {
             throw new InvalidEntityException("Task with " + taskId + " ID not found!");
@@ -36,7 +40,11 @@ public class TaskService {
             if (Database.get(taskId) instanceof Task) {
                 task = (Task) Database.get(taskId);
                 task.status = Task.Status.InProgress;
-                update(task);
+                try {
+                    update(task);
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         } catch (EntityNotFoundException e) {
             throw new InvalidEntityException("Task with " + taskId + " ID not found!");
@@ -48,7 +56,11 @@ public class TaskService {
             if (Database.get(taskId) instanceof Task) {
                 task = (Task) Database.get(taskId);
                 task.status = Task.Status.NotStarted;
-                update(task);
+                try {
+                    update(task);
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         } catch (EntityNotFoundException e) {
             throw new InvalidEntityException("Task with " + taskId + " ID not found!");
@@ -87,7 +99,12 @@ public class TaskService {
                 case "title":
                     task.title = value;
                     String old = ((Task) get(id)).title;
-                    update(task);
+                    try {
+                        update(task);
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
                     System.out.println("Successfully updated the task.");
                     System.out.println("Field: " + field);
                     System.out.println("Old value: " + old);
@@ -97,7 +114,12 @@ public class TaskService {
                 case "description":
                     task.description = value;
                     String Old = ((Task) get(id)).description;
-                    update(task);
+                    try {
+                        update(task);
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
                     System.out.println("Successfully updated the task.");
                     System.out.println("Field: " + field);
                     System.out.println("Old value: " + Old);
@@ -109,7 +131,12 @@ public class TaskService {
                         Date duoDate = simpleDate.parse(value);
                         task.duoDate = duoDate;
                         Date oLd = ((Task) get(id)).duoDate;
-                        update(task);
+                        try {
+                            update(task);
+                        } catch (EntityNotFoundException e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
                         System.out.println("Successfully updated the task.");
                         System.out.println("Field: " + field);
                         System.out.println("Old value: " + oLd);
@@ -136,7 +163,12 @@ public class TaskService {
                             }
                         }
                     }
-                    update(task);
+                    try {
+                        update(task);
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
                     System.out.println("Successfully updated the task.");
                     System.out.println("Field: " + field);
                     System.out.println("New value: " + task.status);
